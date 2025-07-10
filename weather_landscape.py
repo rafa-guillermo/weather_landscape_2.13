@@ -21,7 +21,13 @@ class WeatherLandscape:
         owm = OpenWeatherMap(self.cfg)
         owm.FromAuto()
 
-        img = Image.open(self.cfg.TEMPLATE_FILENAME)
+        # --- START: Modified image creation ---
+        # Instead of opening a fixed-size template image, create a new image
+        # with the dimensions specified in the configuration (self.cfg.WIDTH, self.cfg.HEIGHT).
+        # '1' mode is for 1-bit pixels (black and white), and color=255 sets it to white.
+        img = Image.new('1', (self.cfg.WIDTH, self.cfg.HEIGHT), color=255)
+        # --- END: Modified image creation ---
+
         art = DrawWeather(img,self.cfg)
         img = art.Draw(owm)
 
@@ -33,6 +39,3 @@ class WeatherLandscape:
         outfilepath = self.cfg.ImageFilePath()
         img.save(outfilepath) 
         return outfilepath
-        
-
-        
